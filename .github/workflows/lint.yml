@@ -23,9 +23,7 @@ jobs:
           node-version: 18
 
       - name: 📥 Download deps
-        uses: u0reo/npm-install@fix/restore-failure
-        with:
-          useRollingCache: true
+        run: pnpm install
 
       - name: 🔬 Lint
         run: pnpm lint:strict
