@@ -1,22 +1,28 @@
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
-import type { NextRequest } from 'next/server';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-import type { Database } from '@/types/database.types';
+import { createClient } from '@/services/supabase/server';
 
 export async function GET(request: NextRequest) {
-  const requestUrl = new URL(request.url);
-  const code = requestUrl.searchParams.get('code');
+  const { searchParams } = new URL(request.url);
+  const code = searchParams.get('code');
+  // if "next" is in param, use it as the redirect URL
+  const next = searchParams.get('next') ?? '/';
+
+  const redirectTo = request.nextUrl.clone();
+  redirectTo.pathname = next;
+  // remove all query params
+  redirectTo.search = '';
 
   if (code) {
     const cookieStore = cookies();
-    const supabase = createRouteHandlerClient<Database>({
-      cookies: () => cookieStore,
-    });
-    await supabase.auth.exchangeCodeForSession(code);
+    const supabase = createClient(cookieStore);
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    if (!error) {
+      return NextResponse.redirect(redirectTo);
+    }
   }
 
-  // URL to redirect to after sign in process completes
-  return NextResponse.redirect(requestUrl.origin);
+  redirectTo.pathname = '/error';
+  return NextResponse.redirect(redirectTo);
 }

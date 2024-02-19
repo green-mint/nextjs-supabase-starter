@@ -1,11 +1,9 @@
-'use client';
-
 import Head from 'next/head';
 import * as React from 'react';
 
 import { Button } from '@/components/ui/button';
 
-export default function HomePage() {
+export default async function HomePage() {
   return (
     <main>
       <Head>

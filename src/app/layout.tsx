@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import * as React from 'react';
+import { Toaster } from 'sonner';
 
 import '@/styles/globals.css';
 
@@ -45,7 +46,10 @@ export default function RootLayout({
 }) {
   return (
     <html className=''>
-      <body className='bg-white dark:bg-black'>{children}</body>
+      <body className='bg-white dark:bg-black'>
+        <main>{children}</main>
+        <Toaster />
+      </body>
     </html>
   );
 }

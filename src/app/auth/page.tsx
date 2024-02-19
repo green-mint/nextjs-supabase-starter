@@ -1,7 +1,8 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 
-import { UserAuthForm } from '@/components/auth/user-auth-form';
+import { MagicLinkLogin } from '@/components/auth/magic-link-login';
+import { SocialLogins } from '@/components/auth/social-logins';
 
 export const metadata: Metadata = {
   title: 'Authentication',
@@ -20,7 +21,20 @@ export default function AuthenticationPage() {
             Enter your email below to create your account
           </p>
         </div>
-        <UserAuthForm />
+        <div className='grid gap-6'>
+          <MagicLinkLogin />
+          <div className='relative'>
+            <div className='absolute inset-0 flex items-center'>
+              <span className='w-full border-t' />
+            </div>
+            <div className='relative flex justify-center text-xs uppercase'>
+              <span className='bg-background px-2 text-muted-foreground'>
+                Or continue with
+              </span>
+            </div>
+          </div>
+          <SocialLogins />
+        </div>
         <p className='px-8 text-center text-sm text-muted-foreground dark:text-white'>
           By clicking continue, you agree to our{' '}
           <Link
